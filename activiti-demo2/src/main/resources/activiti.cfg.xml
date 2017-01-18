@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+				http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activiti" />
+		<property name="jdbcDriver" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUsername" value="activiti" />
+		<property name="jdbcPassword" value="activiti" />
+		<property name="databaseSchemaUpdate" value="true" />
+
+		<property name="jdbcMaxActiveConnections" value="100" />
+		<property name="jdbcMaxIdleConnections" value="10" />
+		
+		<property name="history" value="none" />
+		
+		<property name="mailServerHost" value="localhost" />
+		<property name="mailServerPort" value="25" />
+
+		<property name="jobExecutorActivate" value="true" />
+	</bean>
+</beans>

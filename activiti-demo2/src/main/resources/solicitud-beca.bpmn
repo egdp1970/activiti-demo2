@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="tramite-solicitud-beca" name="tramite-solicitud-beca" isExecutable="true">
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <serviceTask id="gestion-aprobadas" name="gestion-aprobadas" activiti:class="es.ine.sgtic.activiti.servicios.ServicioSolicitudBecaAprobada"></serviceTask>
+    <serviceTask id="gestion-rechazadas" name="gestion-rechazadas" activiti:class="es.ine.sgtic.activiti.servicios.ServicioSolicitudBecaRechazada"></serviceTask>
+    <sequenceFlow id="flow3" sourceRef="exclusivegateway1" targetRef="gestion-aprobadas">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validada==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow4" sourceRef="exclusivegateway1" targetRef="gestion-rechazadas">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${validada==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="flow5" sourceRef="gestion-aprobadas" targetRef="firmar-solicitud-aprobada"></sequenceFlow>
+    <sequenceFlow id="flow6" sourceRef="gestion-rechazadas" targetRef="mailtask1"></sequenceFlow>
+    <serviceTask id="validar-solicitud" name="validar-solicitud" activiti:class="es.ine.sgtic.activiti.servicios.ServicioSolicitudBecaValidar"></serviceTask>
+    <sequenceFlow id="flow9" sourceRef="validar-solicitud" targetRef="exclusivegateway1"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <serviceTask id="mailtask1" name="Mail Task" activiti:type="mail">
+      <extensionElements>
+        <activiti:field name="to">
+          <activiti:expression><![CDATA[${mailto}]]></activiti:expression>
+        </activiti:field>
+        <activiti:field name="from">
+          <activiti:string><![CDATA[no-reply@ine.es]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="subject">
+          <activiti:string><![CDATA[Solicitud de Beca]]></activiti:string>
+        </activiti:field>
+        <activiti:field name="text">
+          <activiti:expression><![CDATA[${contestacion}]]></activiti:expression>
+        </activiti:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="flow10" sourceRef="mailtask1" targetRef="endevent1"></sequenceFlow>
+    <sequenceFlow id="flow11" sourceRef="startevent1" targetRef="validar-solicitud"></sequenceFlow>
+    <userTask id="firmar-solicitud-aprobada" name="firmar-solicitud-aprobada" activiti:assignee="presidente"></userTask>
+    <sequenceFlow id="flow12" sourceRef="firmar-solicitud-aprobada" targetRef="mailtask1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_tramite-solicitud-beca">
+    <bpmndi:BPMNPlane bpmnElement="tramite-solicitud-beca" id="BPMNPlane_tramite-solicitud-beca">
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="20.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="660.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gestion-aprobadas" id="BPMNShape_gestion-aprobadas">
+        <omgdc:Bounds height="55.0" width="105.0" x="198.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="gestion-rechazadas" id="BPMNShape_gestion-rechazadas">
+        <omgdc:Bounds height="55.0" width="105.0" x="198.0" y="280.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="validar-solicitud" id="BPMNShape_validar-solicitud">
+        <omgdc:Bounds height="55.0" width="105.0" x="90.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="230.0" y="167.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="mailtask1" id="BPMNShape_mailtask1">
+        <omgdc:Bounds height="55.0" width="115.0" x="501.0" y="160.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="firmar-solicitud-aprobada" id="BPMNShape_firmar-solicitud-aprobada">
+        <omgdc:Bounds height="55.0" width="105.0" x="397.0" y="50.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="250.0" y="167.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="105.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="250.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="250.0" y="280.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="303.0" y="77.0"></omgdi:waypoint>
+        <omgdi:waypoint x="397.0" y="77.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow6" id="BPMNEdge_flow6">
+        <omgdi:waypoint x="303.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="558.0" y="307.0"></omgdi:waypoint>
+        <omgdi:waypoint x="558.0" y="215.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow9" id="BPMNEdge_flow9">
+        <omgdi:waypoint x="195.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="230.0" y="187.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow10" id="BPMNEdge_flow10">
+        <omgdi:waypoint x="616.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="660.0" y="187.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow11" id="BPMNEdge_flow11">
+        <omgdi:waypoint x="55.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="90.0" y="187.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow12" id="BPMNEdge_flow12">
+        <omgdi:waypoint x="502.0" y="77.0"></omgdi:waypoint>
+        <omgdi:waypoint x="558.0" y="77.0"></omgdi:waypoint>
+        <omgdi:waypoint x="558.0" y="160.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,15 @@
+Páginas interesantes:
+
+1) Página que describe todas los tipos de tareas: https://www.lucidchart.com/pages/bpmn/activities/tasks
+2) Generador de proyectos maven con Spring Boot y las dependencias que necesitemos: http://start.spring.io/
+3) Editor de flujos bpmn2 online: https://activiti.alfresco.com/activiti-app/editor
+4) Un manual general con todo: https://www.activiti.org/userguide/
+5) El sitio de Activiti: https://www.activiti.org/
+6) Wars de activiti: Se descargan en: https://www.activiti.org/download-links Manual en el apartado 2 de https://www.activiti.org/userguide/ 
+
+   http://localhost:8080/activiti-explorer
+   http:// 
+Ejemplos interesantes:
+
+https://www.youtube.com/watch?v=v_74dnJfBZI
+http://www.mastertheboss.com/jboss-jbpm/activiti-bpmn/activiti-tutorial?showall=
